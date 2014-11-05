@@ -11,22 +11,26 @@
 
 
 /**
- * 	_io_setPinDirection set the data direction of the requested pin on the given port
- * 	valid ports are those on the Tarantula's edge: 'A','B','D','F';
+ * 	_io_setPinDirection() sets the data direction of the requested pin on the given port.
+ * 	valid ports are those on the Tarantula's edge: 'A','B','D','F'. Valid direction values are
+ * 	'i' for digital input, and 'o' for digital output.
+ *  this function returns error (-1) when port or direction is invalid.
  */
 extern int _io_setPinDirection(char port, int pinnr, char direction);
 
 /**
  * 	_io_setPinValue() writes the value to the requested pin.
  * 	Note that value is an unsigned integer. Therefore true is used for
- *  any value different form 0, and false for 0;
+ *  any value different form 0, and false for 0.
+ *  this function returns error (-1) when port is invalid.
  */
 extern int _io_setPinValue(char port, int pinnr, unsigned int* value);
 
 /**
  * 	_io_getPinValue() puts the bit-value of the requested pin in value.
  * 	Note that value is an unsigned integer. Therefore true is represented
- * 	by any value different form 0, and false by 0;
+ * 	by any value different form 0, and false by 0.
+ *  this function returns error (-1) when port is invalid.
  */
 extern int _io_getPinValue(char port, int pinnr, unsigned int* value);
 
