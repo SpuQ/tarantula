@@ -1,12 +1,11 @@
-README.md
+tarantula README.md
 
 These c libraries are meant to increase productivity on developing stuff with
 Digital AD Technics' Expansion Board REV2.1 "Tarantula".
 
 
 05/11/2014
-- Andreas took over the coding behind the api-functions, a lot of lookups and/or
-switches comming your way bro!
+- Andreas took over the coding for the gpio wrapper functions
 - Start development of the dedicated hardware-dependend I/O layer + api, just to elimintate
 directives like 'DDRA' in higher levels of code (for the softwarepeople)
 
