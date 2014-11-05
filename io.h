@@ -4,10 +4,31 @@
 /*
  * 	tarantula/io.h - 	This module is a driver for the onboard I/O on Tarantula
  *
- * 	Origin:	30/06/2013, 	last update: 04/11/2014
+ * 	Origin:	30/06/2013, 	last update: 05/11/2014
  * 	Author: Tom Santens
  * 			tom@pagoni.org
  */
+
+
+/**
+ * 	_io_setPinDirection set the data direction of the requested pin on the given port
+ * 	valid ports are those on the Tarantula's edge: 'A','B','D','F';
+ */
+extern int _io_setPinDirection(char port, int pinnr, char direction);
+
+/**
+ * 	_io_setPinValue() writes the value to the requested pin.
+ * 	Note that value is an unsigned integer. Therefore true is used for
+ *  any value different form 0, and false for 0;
+ */
+extern int _io_setPinValue(char port, int pinnr, unsigned int* value);
+
+/**
+ * 	_io_getPinValue() puts the bit-value of the requested pin in value.
+ * 	Note that value is an unsigned integer. Therefore true is represented
+ * 	by any value different form 0, and false by 0;
+ */
+extern int _io_getPinValue(char port, int pinnr, unsigned int* value);
 
 /**
  * 	_io_init() initializes the onboard io.
@@ -35,4 +56,4 @@ extern int _io_buttons(int *button1, int *button2);
  */
 extern void _io_heartbeat(void);
 
-#endif
+#endif	/* !TARANTULA_IO_H */

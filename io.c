@@ -1,6 +1,100 @@
 #include "io.h"
 #include <avr/io.h>
 
+int _io_setPinDirection(char port, int pinnr, char direction){
+	unsigned char *ddr;
+
+	switch(port){
+		case 'A':	ddr=&DDRA;
+			break;
+		case 'B':	ddr=&DDRB;
+			break;
+		case 'D':	ddr=&DDRD;
+			break;
+		case 'F':	ddr=&DDRF;
+			break;
+		default: return -1;
+			break;
+	}
+
+	switch(direction){
+	case 'i':	_io_clrBit(ddr, pinnr);
+		break;
+	case 'o':	_io_setBit(ddr, pinnr);
+		break;
+	default: return -1;
+		break;
+	}
+
+	return 0;
+}
+
+int _io_getPinValue(char port, int pinnr, unsigned int* value){
+	unsigned char *ioport;
+
+	switch(port){
+		case 'A':	ioport=&PINA;
+			break;
+		case 'B':	ioport=&PINB;
+			break;
+		case 'D':	ioport=&PIND;
+			break;
+		case 'F':	ioport=&PINF;
+			break;
+		default: return -1;
+			break;
+	}
+
+	*value = _io_getBit(ioport, pinnr);
+
+	return 0;
+}
+
+int _io_setPinValue(char port, int pinnr, unsigned int* value){
+	unsigned char *ioport;
+
+	switch(port){
+		case 'A':	ioport=&DDRA;
+			break;
+		case 'B':	ioport=&DDRB;
+			break;
+		case 'D':	ioport=&DDRD;
+			break;
+		case 'F':	ioport=&DDRF;
+			break;
+		default: return -1;
+			break;
+	}
+
+	switch(*value){
+		case 0: _io_clrBit(ioport, pinnr);
+			break;
+		default: _io_setBit(ioport, pinnr);
+			break;
+	}
+
+	return 0;
+}
+
+/**
+ * bit-in-byte manipulations (not in API)
+ */
+void _io_setBit(unsigned char* byte, int bitnr){
+	*byte &= ~(1 << bitnr);
+}
+
+void _io_clrBit(unsigned char* byte, int bitnr){
+	*byte |= (1 << bitnr);
+}
+
+void _io_tglBit(unsigned char* byte, int bitnr){
+	*byte ^= (1 << bitnr);
+}
+
+_io_getBit(unsigned char* byte, int bitnr){
+	return *byte&bitnr;		// TODO - add correct implementation
+}
+
 void _io_init(void){
 	DDRE=0x1F;
 

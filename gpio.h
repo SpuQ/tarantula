@@ -15,20 +15,18 @@
  * 	'i' for digital input, 'o' for digital output and 'p' for PWM output.
  * 	returns 0 when successful.
  */
-int _gpio_init(char port, unsigned int pin, char function);
+extern int _gpio_init(char port, unsigned int pin, char function);
 
 /**
  * 	the _gpio_setValue() function gets the value from the requested pin's current functionality
  * 	returns 0 when successful
  */
-int _gpio_getValue(char port, unsigned int pin, int *value);
+extern int _gpio_getValue(char port, unsigned int pin, int *value);
 
 /**
  * 	the _gpio_setValue() function sets the value of the requested pin's current functionality
  * 	returns 0 when successful
  */
-int _gpio_setValue(char port, unsigned int pin, int *value);
+extern int _gpio_setValue(char port, unsigned int pin, int *value);
 
-
-// end of "tarantula/gpio.h"
-#endif
+#endif /* !TARANTULA_GPIO_H */
