@@ -1,9 +1,14 @@
 #include "io.h"
 #include <avr/io.h>
 
-int _io_setPinDirection(char port, int pinnr, char direction){
-	unsigned char *ddr;
+void _io_setBit(unsigned char* byte, int bitnr);
+void _io_clrBit(unsigned char* byte, int bitnr);
+void _io_tglBit(unsigned char* byte, int bitnr);
+unsigned char _io_getBit(unsigned char* byte, int bitnr);
 
+int _io_setPinDirection(char port, int pinnr, char direction){
+	void* ddr;
+	_SFR_IO8(0x01) = 0;
 	switch(port){
 		case 'A':	ddr=&DDRA;
 			break;
@@ -45,7 +50,7 @@ int _io_getPinValue(char port, int pinnr, unsigned int* value){
 			break;
 	}
 
-	*value = _io_getBit(ioport, pinnr);
+	*value = (unsigned int)(_io_getBit(ioport, (unsigned int)pinnr));
 
 	return 0;
 }
@@ -54,13 +59,13 @@ int _io_setPinValue(char port, int pinnr, unsigned int* value){
 	unsigned char *ioport;
 
 	switch(port){
-		case 'A':	ioport=&DDRA;
+		case 'A':	ioport=&PORTA;
 			break;
-		case 'B':	ioport=&DDRB;
+		case 'B':	ioport=&PORTB;
 			break;
-		case 'D':	ioport=&DDRD;
+		case 'D':	ioport=&PORTD;
 			break;
-		case 'F':	ioport=&DDRF;
+		case 'F':	ioport=&PORTF;
 			break;
 		default: return -1;
 			break;
@@ -80,19 +85,38 @@ int _io_setPinValue(char port, int pinnr, unsigned int* value){
  * bit-in-byte manipulations (not in API)
  */
 void _io_setBit(unsigned char* byte, int bitnr){
-	*byte &= ~(1 << bitnr);
+	*byte |= (1 << bitnr);
 }
 
 void _io_clrBit(unsigned char* byte, int bitnr){
-	*byte |= (1 << bitnr);
+	*byte &= ~(1 << bitnr);
 }
 
 void _io_tglBit(unsigned char* byte, int bitnr){
 	*byte ^= (1 << bitnr);
 }
 
-_io_getBit(unsigned char* byte, int bitnr){
-	return *byte&bitnr;		// TODO - add correct implementation
+unsigned char _io_getBit(unsigned char* byte, int bitnr){
+	switch(bitnr){
+		case 0: return (unsigned char)((*byte&0x01)>>bitnr);
+			break;
+		case 1: return (unsigned char)((*byte&0x02)>>bitnr);
+			break;
+		case 2: return (unsigned char)((*byte&0x04)>>bitnr);
+			break;
+		case 3: return (unsigned char)((*byte&0x08)>>bitnr);
+			break;
+		case 4: return (unsigned char)((*byte&0x10)>>bitnr);
+			break;
+		case 5: return (unsigned char)((*byte&0x20)>>bitnr);
+			break;
+		case 6: return (unsigned char)((*byte&0x40)>>bitnr);
+			break;
+		case 7: return (unsigned char)((*byte&0x80)>>bitnr);
+			break;
+	}
+
+	return (unsigned char) 4;
 }
 
 void _io_init(void){
@@ -103,7 +127,7 @@ void _io_init(void){
 	_io_LED3(0);
 }
 
-void _io_LED1(value){
+void _io_LED1(int value){
 	switch(value){
 		case 0: (PORTE |= (1 << PE2)); // led off
 				break;
@@ -114,23 +138,24 @@ void _io_LED1(value){
 	}
 }
 
-void _io_LED2(value){
+void _io_LED2(int value){
 	switch(value){
-		case 0: (PORTE |= (1 << PE3)); // led off
+		case 0: (PORTE |= (1 << PE3));
 				break;
-		case 1:	(PORTE &= ~(1 << PE3));  // led on
+		case 1:	(PORTE &= ~(1 << PE3));
 				break;
-		case 2: (PORTE ^= (1<<PE3));	//toggle
+		case 2: (PORTE ^= (1<<PE3));
 				break;
 	}
 }
-void _io_LED3(value){
+
+void _io_LED3(int value){
 	switch(value){
-		case 0: (PORTE |= (1 << PE4)); // led off
+		case 0: (PORTE |= (1 << PE4));
 				break;
-		case 1:	(PORTE &= ~(1 << PE4));  // led on
+		case 1:	(PORTE &= ~(1 << PE4));
 				break;
-		case 2: (PORTE ^= (1<<PE4));	//toggle
+		case 2: (PORTE ^= (1<<PE4));
 				break;
 	}
 }
