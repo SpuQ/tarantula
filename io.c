@@ -160,38 +160,35 @@ void _io_LED3(int value){
 	}
 }
 
-int _io_buttons(int *button1, int *button2){
-	int changes=0;
-	unsigned int tempbut;
+int _io_button1(unsigned int *state){
+		static unsigned int prevstate=0;
 
-		tempbut=*button1;
-		if(!(PINE & _BV(PE5)))
-		{
-
-			*button1=0xFF;
-
+		if(!(PINE & _BV(PE5))){
+			*state = 0xFF;
 		}
 		else {
-			*button1=0x00;
+			*state = 0x00;
 		}
-		if(tempbut!=*button1){
-				changes++;
+		if(*state != prevstate){
+			prevstate = *state;
+			return 1;
 		}
+}
 
-		tempbut=*button2;
-		if(!(PINE & _BV(PE6)))
-		{
-			*button2=0xFF;
-		}
-		else {
-			*button2=0x00;
-		}
-		if(tempbut!=*button2){
-				changes++;
-		}
+int _io_button2(unsigned int *state){
+	static unsigned int prevstate=0;
 
-
-	return changes;
+	if(!(PINE & _BV(PE6))){
+		*state = 0xFF;
+	}
+	else {
+		*state = 0x00;
+	}
+	if(*state != prevstate){
+		prevstate = *state;
+		return 1;
+	}
+	return 0;
 }
 
 void _io_heartbeat(void){

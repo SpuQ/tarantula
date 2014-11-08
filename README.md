@@ -3,6 +3,8 @@ tarantula README.md
 These c libraries are meant to increase productivity on developing stuff with
 Digital AD Technics' Expansion Board REV2.1 "Tarantula".
 
+08/11/2014
+- Start revision of SpuQcom, under the new name "Qcumber". Added API to repository.
 
 05/11/2014
 - Andreas took over the coding for the gpio wrapper functions

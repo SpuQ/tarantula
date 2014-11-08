@@ -4,7 +4,7 @@
 /*
  * 	tarantula/io.h - 	This module is a driver for the onboard I/O on Tarantula
  *
- * 	Origin:	30/06/2013, 	last update: 05/11/2014
+ * 	Origin:	30/06/2013, 	last update: 06/11/2014
  * 	Author: Tom Santens
  * 			tom@pagoni.org
  */
@@ -48,11 +48,12 @@ extern void _io_LED2(int value);
 extern void _io_LED3(int value);
 
 /**
- *	_io_buttons() checks whether there has been a state-change on one or both buttons. The argument
- *	accepts pointers to variables containing the previous button states, and overwrites them with the
- *	new state. This function returns the number of changes.
+ *	_io_button1() and _io_button2() check whether there has been a state-change on its button. The state of the
+ *	button is copied to the arguments address whereby binary 1 is represented by all values that are not 0, and
+ *	binary 0 by 0. When the current state differs from the previous state, these functions return 1, 0 otherwise.
  */
-extern int _io_buttons(int *button1, int *button2);
+extern int _io_button1(unsigned int *state);
+extern int _io_button2(unsigned int *state);
 
 /**
  * 	When called in a loop, _io_heartbeat() generates heartbeat-alike pulse on LED0. On the
