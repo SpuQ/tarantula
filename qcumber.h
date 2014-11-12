@@ -11,12 +11,13 @@
  *	system message:		|STARTBYTE|MESSAGETAG| <message> |MESSAGETAG| STOPBYTE  |
  * 						0		  1			 2			 n		   n+1		   n+2		    n+m		   n+m+1	(bytes)
  *
- * 	Origin:	08/11/2014
+ *
+ *
+ * 	Origin:	08/11/2014		last modified: 12/11/2014
  * 	Author: Tom Santens
  * 			tom@pagoni.org
  * 	Source: github.com/SpuQ
  */
-
 
 #define QPACKET_STARTBYTE	'<'		// byte that indicates a packet start
 #define QPACKET_STOPBYTE	'>'		// byte that indicates a packet stop
@@ -64,6 +65,20 @@ extern int _Qc_putByte(unsigned char* byte);
  * 	Note: this function is designed to be called in a loop until there are no bytes left to output
  */
 extern int _Qc_getByte(unsigned char* byte);
+
+/**
+ * 	_Qc_loopback() puts the service and argument as a Qcumber packet on the input stack. This way
+ * 	the device gives instructions to itself.
+ * 	returns 0 on success.
+ */
+extern int _Qc_loopback(unsigned char* service, unsigned char* argument);
+
+/**
+ * 	_Qc_instruct() puts the service and argument as a Qcumber packet on the output stack. Using this function
+ * 	discards the device as slave for it instructs/informs the host without request.
+ * 	returns 0 on success.
+ */
+extern int _Qc_instruct(unsigned char* service, unsigned char* argument);
 
 
 #endif	/* !QCUMBER_H */
