@@ -84,7 +84,6 @@ extern int _Qc_instruct(unsigned char* service, unsigned char* argument);
  * 	_Qc_init() initializes the Qcumber mechanism.
  * 	Returns 0 on success.
  */
-
 extern int _Qc_init(void);
 
 #endif	/* !QCUMBER_H */
