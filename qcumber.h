@@ -69,16 +69,22 @@ extern int _Qc_getByte(unsigned char* byte);
 /**
  * 	_Qc_loopback() puts the service and argument as a Qcumber packet on the input stack. This way
  * 	the device gives instructions to itself.
- * 	returns 0 on success.
+ * 	Returns 0 on success.
  */
 extern int _Qc_loopback(unsigned char* service, unsigned char* argument);
 
 /**
  * 	_Qc_instruct() puts the service and argument as a Qcumber packet on the output stack. Using this function
  * 	discards the device as slave for it instructs/informs the host without request.
- * 	returns 0 on success.
+ * 	Returns 0 on success.
  */
 extern int _Qc_instruct(unsigned char* service, unsigned char* argument);
 
+/**
+ * 	_Qc_init() initializes the Qcumber mechanism.
+ * 	Returns 0 on success.
+ */
+
+extern int _Qc_init(void);
 
 #endif	/* !QCUMBER_H */
