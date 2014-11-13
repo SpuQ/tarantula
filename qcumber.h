@@ -7,13 +7,14 @@
  *
  *
  * 	Qcumber packets as recognized and formulated in the i/o streams:
- * 	instruction/answer:	|STARTBYTE|SERVICETAG| <service> |SERVICETAG|ARGUMENTTAG| <argument> |ARGUMENTTAG|STOPBYTE|
- *	system message:		|STARTBYTE|MESSAGETAG| <message> |MESSAGETAG| STOPBYTE  |
- * 						0		  1			 2			 n		   n+1		   n+2		    n+m		   n+m+1	(bytes)
+ * 	instruction/answer:
+ * 	|STARTBYTE|PRIORITYTAG|<priority>|PRIORITYTAG|SERVICETAG| <service> |SERVICETAG|ARGUMENTTAG| <argument> |ARGUMENTTAG|STOPBYTE|
+ *	system message:
+ *	|STARTBYTE|PRIORITYTAG|<priority>|PRIORITYTAG|MESSAGETAG| <message> |MESSAGETAG| STOPBYTE  |
  *
  *
  *
- * 	Origin:	08/11/2014		last modified: 12/11/2014
+ * 	Origin:	08/11/2014		last modified: 13/11/2014
  * 	Author: Tom Santens
  * 			tom@pagoni.org
  * 	Source: github.com/SpuQ
@@ -24,26 +25,31 @@
 #define QPACKET_SERVICETAG	'#'		// byte that is put in front and after a service in the packet
 #define QPACKET_ARGUMENTTAG	'*'		// byte that is put in front and after a service argument in the packet
 #define QPACKET_MESSAGETAG	'%'		// byte that is put in front and after a system message
+#define QPACKET_PRIORITYTAG	'-'		// byte that is put in front and after a priority indicator
+#define QPRIORITY_DEFAULT	1		// default priority level
 
 #define QSERVICE_NAMELENGTH	10		// limits the size of the service name
 #define QSERVICE_ARGLENGTH	10		// limits the size of the argument
 #define QSERVICE_MSGLENGTH	50		// limits the size of a system message
 
-#define QINPUTBUFFERSIZE	300		// limits the size of the input stream buffer
-#define QOUTPUTBUFFERSIZE	300		// limits the size of the output stream buffer
+#define QINPUTSTACKSIZE		10		// limits the size of the input stack
+#define QOUTPUTSTACKSIZE	10		// limits the size of the output stack
+
+#define QSERVICES	20				// limits the amount of assignable services
 
 /**
  * 	_Qc_addService() makes the function presented in the argument usable from another system via
  * 	the i/o stream. The service name is the identifier whereby this function is recognized by
  * 	the Qcumber mechanism.
+ * 	Returns a negative value when no more services can be added, and when all good the total of added services
  */
 extern int _Qc_addService(unsigned char* serviceName, int* serviceFunction(unsigned char* ));
 
 /**
  * 	_Qc_message() delivers the argument as a system message to the host.
- * 	Note that the Qcumber mechanism uses this function internally to report anomalies.
+ * 	Note that the Qcumber mechanism uses this function internally to report anomalies using the QPRIORITY_DEFAULT.
  */
-extern int _Qc_message(char *message);
+extern int _Qc_message(char *message, int priority);
 
 /**
  *	_Qc_execute() checks for and executes received instructions.
@@ -60,8 +66,8 @@ extern int _Qc_putByte(unsigned char* byte);
 
 /**
  * 	_Qc_getByte() gets a byte from the Qcumber mechanism's output stream.
- * 	Returns the number of bytes left in the output buffer when positive, indicates something went
- * 	wrong when negative.
+ * 	Returns the number of bytes left in the output buffer when positive. 0 indicates a complete packet
+ * 	has been send. When a negative value is returned, there is really nothing left.
  * 	Note: this function is designed to be called in a loop until there are no bytes left to output
  */
 extern int _Qc_getByte(unsigned char* byte);
@@ -71,19 +77,20 @@ extern int _Qc_getByte(unsigned char* byte);
  * 	the device gives instructions to itself.
  * 	Returns 0 on success.
  */
-extern int _Qc_loopback(unsigned char* service, unsigned char* argument);
+extern int _Qc_loopback(unsigned char* service, unsigned char* argument, int priority);
 
 /**
  * 	_Qc_instruct() puts the service and argument as a Qcumber packet on the output stack. Using this function
  * 	discards the device as slave for it instructs/informs the host without request.
  * 	Returns 0 on success.
  */
-extern int _Qc_instruct(unsigned char* service, unsigned char* argument);
+extern int _Qc_instruct(unsigned char* service, unsigned char* argument, int priority);
 
 /**
  * 	_Qc_init() initializes the Qcumber mechanism.
  * 	Returns 0 on success.
  */
 extern int _Qc_init(void);
+
 
 #endif	/* !QCUMBER_H */

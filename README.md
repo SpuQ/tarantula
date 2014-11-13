@@ -3,8 +3,11 @@ tarantula README.md
 These c libraries are meant to increase productivity on developing stuff with
 Digital AD Technics' Expansion Board REV2.1 "Tarantula".
 
+13/11/2014
+- added priorities for incomming and outgoing packets (affects the loopback(), instruct() and message() functions)
+
 12/11/2014
-- added the loopback() and instruct() functions to the Qcumber API
+- added the loopback(), instruct() and init() functions to the Qcumber API
 
 08/11/2014
 - Start revision of SpuQcom, under the new name "Qcumber". Added API to repository.
